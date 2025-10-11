@@ -1,0 +1,105 @@
+_base_ = '../../_base_/default_runtime.py'
+
+model = dict(
+    type='RecognizerGCN',
+    backbone=dict(
+        type='STGCN',
+        graph_cfg=dict(layout='openpose', mode='stgcn_spatial'),
+        in_channels=3,
+        num_person=1,
+    ),
+    cls_head=dict(type='GCNHead', num_classes=4, in_channels=256),
+)
+
+dataset_type = 'PoseDataset'
+ann_root = 'openmm/mmaction2/data/skeleton'
+train_ann = f'{ann_root}/vipharpet_train.pkl'
+val_ann = f'{ann_root}/vipharpet_val.pkl'
+test_ann = f'{ann_root}/vipharpet_test.pkl'
+
+train_pipeline = [
+    dict(type='PreNormalize2D'),
+    dict(type='GenSkeFeat', dataset='openpose', feats=['j']),
+    dict(type='UniformSampleFrames', clip_len=3),
+    dict(type='PoseDecode'),
+    dict(type='FormatGCNInput', num_person=1),
+    dict(type='PackActionInputs'),
+]
+
+val_pipeline = [
+    dict(type='PreNormalize2D'),
+    dict(type='GenSkeFeat', dataset='openpose', feats=['j']),
+    dict(type='UniformSampleFrames', clip_len=3, num_clips=1, test_mode=True),
+    dict(type='PoseDecode'),
+    dict(type='FormatGCNInput', num_person=1),
+    dict(type='PackActionInputs'),
+]
+
+test_pipeline = [
+    dict(type='PreNormalize2D'),
+    dict(type='GenSkeFeat', dataset='openpose', feats=['j']),
+    dict(type='UniformSampleFrames', clip_len=3, num_clips=1, test_mode=True),
+    dict(type='PoseDecode'),
+    dict(type='FormatGCNInput', num_person=1),
+    dict(type='PackActionInputs'),
+]
+
+train_dataloader = dict(
+    batch_size=32,
+    num_workers=4,
+    persistent_workers=True,
+    sampler=dict(type='DefaultSampler', shuffle=True),
+    dataset=dict(
+        type=dataset_type,
+        ann_file=train_ann,
+        pipeline=train_pipeline,
+    ),
+)
+
+val_dataloader = dict(
+    batch_size=32,
+    num_workers=4,
+    persistent_workers=True,
+    sampler=dict(type='DefaultSampler', shuffle=False),
+    dataset=dict(
+        type=dataset_type,
+        ann_file=val_ann,
+        pipeline=val_pipeline,
+        test_mode=True,
+    ),
+)
+
+test_dataloader = dict(
+    batch_size=32,
+    num_workers=4,
+    persistent_workers=True,
+    sampler=dict(type='DefaultSampler', shuffle=False),
+    dataset=dict(
+        type=dataset_type,
+        ann_file=test_ann,
+        pipeline=test_pipeline,
+        test_mode=True,
+    ),
+)
+
+val_evaluator = [dict(type='AccMetric')]
+test_evaluator = val_evaluator
+
+train_cfg = dict(type='EpochBasedTrainLoop', max_epochs=30, val_begin=1, val_interval=1)
+val_cfg = dict(type='ValLoop')
+test_cfg = dict(type='TestLoop')
+
+param_scheduler = [
+    dict(
+        type='CosineAnnealingLR', eta_min=0.0, T_max=30, by_epoch=True, convert_to_iter_based=True
+    )
+]
+
+optim_wrapper = dict(
+    optimizer=dict(type='SGD', lr=0.05, momentum=0.9, weight_decay=5e-4, nesterov=True)
+)
+
+default_hooks = dict(checkpoint=dict(interval=1, save_best='auto'), logger=dict(interval=100))
+
+auto_scale_lr = dict(enable=False, base_batch_size=256)
+

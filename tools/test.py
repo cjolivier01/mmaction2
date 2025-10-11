@@ -4,6 +4,10 @@ import os
 import os.path as osp
 
 from mmengine.config import Config, DictAction
+import torch
+import torch.serialization as _torch_serial
+from mmengine.logging.history_buffer import HistoryBuffer as _MMHistoryBuffer
+import numpy as _np
 from mmengine.runner import Runner
 
 from mmaction.registry import RUNNERS
@@ -93,6 +97,22 @@ def main():
 
     # load config
     cfg = Config.fromfile(args.config)
+    # Allowlist mmengine HistoryBuffer in torch.load safe deserialization
+    # so checkpoints saved with mmengine can be loaded under PyTorch >=2.6
+    try:
+        _torch_serial.add_safe_globals([_MMHistoryBuffer, _np.core.multiarray._reconstruct])
+    except Exception:
+        pass
+    # Force torch.load to use weights_only=False for mmengine checkpoints
+    # to avoid repeated allowlisting churn. Only do this in this CLI.
+    try:
+        _orig_torch_load = torch.load
+        def _patched_torch_load(*a, **kw):
+            kw.setdefault('weights_only', False)
+            return _orig_torch_load(*a, **kw)
+        torch.load = _patched_torch_load  # type: ignore
+    except Exception:
+        pass
     cfg = merge_args(cfg, args)
     cfg.launcher = args.launcher
     if args.cfg_options is not None:
