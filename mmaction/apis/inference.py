@@ -160,8 +160,8 @@ def inference_skeleton(model: nn.Module,
     for f_idx, frm_pose in enumerate(pose_results):
         frm_num_persons = frm_pose['keypoints'].shape[0]
         for p_idx in range(frm_num_persons):
-            keypoint[f_idx, p_idx] = frm_pose['keypoints'][p_idx]
-            keypoint_score[f_idx, p_idx] = frm_pose['keypoint_scores'][p_idx]
+            keypoint[f_idx, p_idx] = frm_pose["keypoints"].cpu().numpy()[p_idx]
+            keypoint_score[f_idx, p_idx] = frm_pose["keypoint_scores"].cpu()[p_idx]
 
     fake_anno['keypoint'] = keypoint.transpose((1, 0, 2, 3))
     fake_anno['keypoint_score'] = keypoint_score.transpose((1, 0, 2))
