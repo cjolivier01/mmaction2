@@ -52,7 +52,7 @@ def frame_extract(video_path: str,
     os.makedirs(target_dir, exist_ok=True)
     # Should be able to handle videos up to several hours
     frame_tmpl = osp.join(target_dir, 'img_{:06d}.jpg')
-    assert osp.exists(video_path), f'file not exit {video_path}'
+    assert osp.exists(video_path), f"file does not exists {video_path}"
     vid = cv2.VideoCapture(video_path)
     frames = []
     frame_paths = []

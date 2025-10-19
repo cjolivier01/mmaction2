@@ -457,8 +457,8 @@ def skeleton_based_stdet(args, label_map, human_detections, pose_results,
                     if max_iou < iou:
                         index = k
                         max_iou = iou
-                keypoint[0, j] = poses['keypoints'][index]
-                keypoint_score[0, j] = poses['keypoint_scores'][index]
+                keypoint[0, j] = poses["keypoints"][index].cpu()
+                keypoint_score[0, j] = poses["keypoint_scores"][index].cpu()
 
             fake_anno['keypoint'] = keypoint
             fake_anno['keypoint_score'] = keypoint_score
