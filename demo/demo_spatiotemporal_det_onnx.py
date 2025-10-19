@@ -233,7 +233,7 @@ def main():
     h, w, _ = original_frames[0].shape
 
     # resize frames to shortside
-    new_w, new_h = mmcv.rescale_size((w, h), (args.short_side, np.Inf))
+    new_w, new_h = mmcv.rescale_size((w, h), (args.short_side, np.inf))
     frames = [mmcv.imresize(img, (new_w, new_h)) for img in original_frames]
     w_ratio, h_ratio = new_w / w, new_h / h
 

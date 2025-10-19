@@ -131,7 +131,7 @@ def tracklet2bbox(track, num_frame):
         trackd[k] = v
     for i in range(num_frame):
         if bbox[i][-1] <= 0.5:
-            mind = np.Inf
+            mind = np.inf
             for k in trackd:
                 if np.abs(k - i) < mind:
                     mind = np.abs(k - i)
@@ -142,7 +142,7 @@ def tracklet2bbox(track, num_frame):
 def tracklets2bbox(tracklet, num_frame):
     dists = distance_tracklet(tracklet)
     sorted_inds = sorted(dists, key=lambda x: dists[x])
-    dist_thre = np.Inf
+    dist_thre = np.inf
     for i in sorted_inds:
         if len(tracklet[i]) >= num_frame / 2:
             dist_thre = 2 * dists[i]
@@ -162,7 +162,7 @@ def tracklets2bbox(tracklet, num_frame):
     for idx in range(num_frame):
         if bbox[idx][-1] < 0.01:
             bad += 1
-            mind = np.Inf
+            mind = np.inf
             mink = None
             for k in bboxd:
                 if np.abs(k - idx) < mind:

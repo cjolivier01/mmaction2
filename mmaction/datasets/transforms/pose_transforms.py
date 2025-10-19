@@ -502,7 +502,7 @@ class PoseCompact(BaseTransform):
         kp_x = kp[..., 0]
         kp_y = kp[..., 1]
 
-        # NumPy 2.0+: use np.inf instead of deprecated np.Inf
+        # NumPy 2.0+: use np.inf instead of deprecated np.inf
         min_x = np.min(kp_x[kp_x != 0], initial=np.inf)
         min_y = np.min(kp_y[kp_y != 0], initial=np.inf)
         max_x = np.max(kp_x[kp_x != 0], initial=-np.inf)
@@ -1433,10 +1433,10 @@ class MMCompact(BaseTransform):
         kp_x = keypoint[..., 0]
         kp_y = keypoint[..., 1]
 
-        min_x = np.min(kp_x[kp_x != 0], initial=np.Inf)
-        min_y = np.min(kp_y[kp_y != 0], initial=np.Inf)
-        max_x = np.max(kp_x[kp_x != 0], initial=-np.Inf)
-        max_y = np.max(kp_y[kp_y != 0], initial=-np.Inf)
+        min_x = np.min(kp_x[kp_x != 0], initial=np.inf)
+        min_y = np.min(kp_y[kp_y != 0], initial=np.inf)
+        max_x = np.max(kp_x[kp_x != 0], initial=-np.inf)
+        max_y = np.max(kp_y[kp_y != 0], initial=-np.inf)
 
         # The compact area is too small
         if max_x - min_x < self.threshold or max_y - min_y < self.threshold:

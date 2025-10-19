@@ -386,7 +386,8 @@ class ClipHelper:
         h = int(self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
         w = int(self.cap.get(cv2.CAP_PROP_FRAME_WIDTH))
         self.stdet_input_size = mmcv.rescale_size(
-            (w, h), (stdet_input_shortside, np.Inf))
+            (w, h), (stdet_input_shortside, np.inf)
+        )
         img_norm_cfg = dict(
             mean=np.array(config.model.data_preprocessor.mean),
             std=np.array(config.model.data_preprocessor.std),
@@ -409,7 +410,8 @@ class ClipHelper:
             self.display_size = (display_width, display_height)
         elif display_height > 0 or display_width > 0:
             self.display_size = mmcv.rescale_size(
-                (w, h), (np.Inf, max(display_height, display_width)))
+                (w, h), (np.inf, max(display_height, display_width))
+            )
         else:
             self.display_size = (w, h)
         self.ratio = tuple(

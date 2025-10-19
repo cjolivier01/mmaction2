@@ -12,8 +12,13 @@ import torch
 from mmengine import DictAction
 from mmengine.structures import InstanceData
 
-from mmaction.apis import (detection_inference, inference_recognizer,
-                           inference_skeleton, init_recognizer, pose_inference)
+from mmaction.apis import (
+    detection_inference,
+    inference_recognizer,
+    inference_skeleton,
+    init_recognizer,
+    pose_inference,
+)
 from mmaction.registry import VISUALIZERS
 from mmaction.structures import ActionDataSample
 from mmaction.utils import frame_extract
@@ -579,7 +584,7 @@ def main():
             device=args.device)
 
     # resize frames to shortside 256
-    new_w, new_h = mmcv.rescale_size((w, h), (256, np.Inf))
+    new_w, new_h = mmcv.rescale_size((w, h), (256, np.inf))
     frames = [mmcv.imresize(img, (new_w, new_h)) for img in original_frames]
     w_ratio, h_ratio = new_w / w, new_h / h
 
