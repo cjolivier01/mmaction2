@@ -9,10 +9,19 @@ from mmengine.optim import CosineAnnealingLR
 from mmengine.runner import EpochBasedTrainLoop, TestLoop, ValLoop
 from torch.optim import SGD
 
-from mmaction.datasets import (CenterCrop, Flip, FormatShape,
-                               GeneratePoseTarget, PackActionInputs,
-                               PoseCompact, PoseDataset, PoseDecode,
-                               RandomResizedCrop, Resize, UniformSampleFrames)
+from mmaction.datasets import (
+    CenterCrop,
+    Flip,
+    FormatShape,
+    GeneratePoseTarget,
+    PackActionInputs,
+    PoseCompact,
+    PoseDataset,
+    PoseDecode,
+    RandomResizedCrop,
+    Resize,
+    UniformSampleFrames,
+)
 from mmaction.evaluation import AccMetric
 from mmaction.models import I3DHead, Recognizer3D, ResNet3dSlowOnly
 
@@ -41,7 +50,7 @@ model = dict(
         average_clips='prob'))
 
 dataset_type = 'PoseDataset'
-ann_file = 'data/skeleton/ntu60_2d.pkl'
+ann_file = "tools/data/skeleton/ntu60_2d.pkl"
 left_kp = [1, 3, 5, 7, 9, 11, 13, 15]
 right_kp = [2, 4, 6, 8, 10, 12, 14, 16]
 skeletons = [[0, 5], [0, 6], [5, 7], [7, 9], [6, 8], [8, 10], [5, 11],

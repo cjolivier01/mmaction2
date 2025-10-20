@@ -248,8 +248,8 @@ def pose_inference_with_align(args, frame_paths, det_results):
     for f_idx, frm_pose in enumerate(pose_results):
         frm_num_persons = frm_pose['keypoints'].shape[0]
         for p_idx in range(frm_num_persons):
-            keypoints[p_idx, f_idx] = frm_pose['keypoints'][p_idx]
-            scores[p_idx, f_idx] = frm_pose['keypoint_scores'][p_idx]
+            keypoints[p_idx, f_idx] = frm_pose['keypoints'][p_idx].cpu()
+            scores[p_idx, f_idx] = frm_pose['keypoint_scores'][p_idx].cpu()
 
     return keypoints, scores
 
